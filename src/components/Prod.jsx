@@ -25,12 +25,12 @@ export const Prod = () => {
   const [list, setList] = useState([]);
   const [showModal, setshowModal] = useState(false);
   const [dataModal, setDataModal] = useState([]);
+
   const handleCloseModal = () => {
     setshowModal(false);
   };
   const handleOpenModal = (datos) => {
     setshowModal(true);
-
     setDataModal(datos);
   };
   const handleChangeModal = ({ target }) => {
@@ -44,7 +44,7 @@ export const Prod = () => {
     // alert(dataModal);
     const response = await axios.put(URLSAVE, dataModal);
     try {
-      if (response.status == 200) {
+      if (response.status === 200) {
         await Swal(
           "Actualizado",
           "El producto ha sido actualizado con exito",
@@ -226,5 +226,4 @@ export const Prod = () => {
     </Container>
   );
 };
-
 export default Prod;

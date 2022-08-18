@@ -4,17 +4,24 @@ import moment from "moment";
 
 export const ListaUsu = ({
   Usuario,
-  handleOpenModal,
-  handleCloseModal,
-  setDataModal,
+  HandleCerrarMod,
+  HandleAbrirMod,
+  setDataMod,
 }) => {
-  const handleEditar = (datos) => {
-    //handleOpenModal();
-    // setDataModal(datos);
+  const [dataModal, setDataModal] = useState([]);
+
+  const handleCloseModal = () => {};
+
+  const handleChangeModal = ({ target }) => {
+    setDataModal({
+      ...dataModal,
+      [target.name]: target.value,
+    });
   };
+
   return (
     <Container>
-      <h1 className="text-center"> Listado de Usuarios</h1>
+      <h1 className="text-center"> Listado de Usuario</h1>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -23,7 +30,7 @@ export const ListaUsu = ({
             <th>Direccion</th>
             <th>Telefono</th>
             <th>Usuario</th>
-            <th>Contrasenia</th>
+            <th>Contraseña</th>
             <th>Rol</th>
             <th>Acciones</th>
           </tr>
@@ -39,7 +46,12 @@ export const ListaUsu = ({
               <td>{Usu.pass}</td>
               <td>{Usu.rol}</td>
               <td>
-                <button className="btn btn-info">Editar</button>
+                <button
+                  className="btn btn-info"
+                  onClick={() => HandleAbrirMod(Usu)}
+                >
+                  Editars
+                </button>
               </td>
             </tr>
           </tbody>

@@ -1,14 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { Container, Table, Button, FormLabel, Row } from "react-bootstrap";
+import {
+  Container,
+  Table,
+  Button,
+  FormLabel,
+  Row,
+  Form,
+  Modal,
+  ModalBody,
+  ModalFooter,
+  ModalTitle,
+} from "react-bootstrap";
 
-export const ListaPven = ({ prods, handleElim, setProdu }) => {
-  const [body, setBody] = "";
-  const handleEliminarprod = (indice) => {
-    prods.splice(indice);
-    setProdu(prods);
+export const ListaPven = ({ prods, handleElim, Edita }) => {
+  const [precio, setPrecio] = useState("0");
+  const [canti, setCanti] = useState("0");
+  const [Lprods, setLprods] = useState([]);
+  const [dataModal, setDataModal] = useState([]);
+  const [showModal, setshowModal] = useState(false);
+
+  const handleOpenModal = (id, canti, precios) => {
+    var cambi = { id, canti, precios };
+    setshowModal(true);
+    setDataModal(cambi);
   };
 
-  const handleEditar = (indice) => {};
+  const handleCloseModal = (e) => {
+    setshowModal(false);
+    setPrecio(dataModal.precio);
+    setCanti(dataModal.cant);
+    //handleCamb(dataModal.id, dataModal.canti, dataModal.precios);
+  };
+
+  const handleChangeModal = ({ target }) => {
+    setDataModal({
+      ...dataModal,
+      [target.name]: target.value,
+    });
+  };
+
+  const handleSubmit = (event) => {
+    // 👇️ prevent page refresh
+    event.preventDefault();
+  };
+
+  /*const handleEliminarprod = (indice) => {
+    prods.splice(indice);
+    setProdu(prods);
+  };*/
+
+  /* const handleEditar = (id) => {
+    Lprods.map((datos) => {
+      if (datos.id_prod === id) {
+        datos.cantidad = precio;
+        datos.pven = canti;
+      }
+    });
+  };*/
+
+  const handleSave = () => {
+    Edita(dataModal.id, dataModal.canti, dataModal.precios);
+
+    setshowModal(false);
+  };
+
   const handleId = (valor) => {
     let resp = "";
     valor.map((val) => {
@@ -31,6 +86,7 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
     });
     return resp;
   };
+
   const handlePre = (valor) => {
     let resp = "";
     valor.map((val) => {
@@ -38,6 +94,7 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
     });
     return resp;
   };
+
   const handleCant = (valor) => {
     let resp = "";
     valor.map((val) => {
@@ -45,10 +102,12 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
     });
     return resp;
   };
+
   const handleTot = (valor) => {
     let n1 = 0,
       n2 = 0,
       tot = 0;
+
     valor.map((val) => {
       n1 = val.pven;
       n2 = val.cantidad;
@@ -58,7 +117,19 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
     return tot;
   };
 
-  useEffect(() => {}, []);
+  const totGen = () => {
+    let tot = 0;
+
+    Lprods.map((item, index) => {
+      tot = tot + handleTot(item);
+    });
+    return tot;
+  };
+
+  useEffect(() => {
+    setLprods(prods);
+    console.log(Lprods);
+  }, []);
 
   return (
     <Container>
@@ -78,7 +149,7 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
             </tr>
           </thead>
 
-          {prods.map((p, index) => (
+          {Lprods.map((p, index) => (
             <tbody>
               <tr>
                 <td>{index + 1}</td>
@@ -91,7 +162,9 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
                 <td>
                   <button
                     className="btn btn-info"
-                    onClick={() => handleEditar(index)}
+                    onClick={() =>
+                      handleOpenModal(handleId(p), handleCant(p), handlePre(p))
+                    }
                   >
                     Editar
                   </button>
@@ -110,7 +183,7 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
       <div>
         <Row className="md-10 offset-1">
           <h3>
-            <FormLabel className="md-3 offset-9">Total Q.0.00</FormLabel>
+            <FormLabel className="md-3 offset-9">Total Q.{totGen()}</FormLabel>
           </h3>
         </Row>
         <Row className="md-10 offset-1">
@@ -119,6 +192,58 @@ export const ListaPven = ({ prods, handleElim, setProdu }) => {
           </Button>
         </Row>
       </div>
+
+      <Modal show={showModal} onhide={handleCloseModal}>
+        <Modal.Header>
+          <ModalTitle>Cambiar Valores</ModalTitle>
+        </Modal.Header>
+        <Form onSubmit={handleSubmit}>
+          <ModalBody>
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                name="id_prod"
+                placeholder="Codigo de producto"
+                value={dataModal.id}
+                disabled
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                name="precios"
+                placeholder="Precio"
+                value={dataModal.precios}
+                onChange={handleChangeModal}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group className="mb-3">
+              <Form.Control
+                type="text"
+                name="canti"
+                placeholder="Cantidad"
+                value={dataModal.canti}
+                onChange={handleChangeModal}
+                required
+              />
+            </Form.Group>
+          </ModalBody>
+          <ModalFooter>
+            <button className="btn btn-success" onClick={() => handleSave()}>
+              Guardar cambios
+            </button>
+            <button
+              className="btn btn-danger"
+              onClick={() => setshowModal(false)}
+            >
+              Cerrar
+            </button>
+          </ModalFooter>
+        </Form>
+      </Modal>
     </Container>
   );
 };

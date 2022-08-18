@@ -14,16 +14,40 @@ export const Vent = () => {
 
   const obtenProdu = (prod) => {
     produ.push(prod);
-
     listado(produ);
   };
 
   const editProd = (indice, cant, precio) => {
     produ.map((elem, index) => {
-      if (indice == index) {
-        elem.cant = cant;
+      let canti = 0,
+        price = 0;
+      canti = handlePrec(elem, indice, precio);
+      price = handleCanti(elem, indice, cant);
+      console.log(canti + "---" + price);
+    });
+    setProdu(produ);
+    listado(produ);
+  };
+
+  const handlePrec = (valor, id, prize) => {
+    let resp = "0";
+    valor.map((val) => {
+      if (id == val.id_prod) {
+        val.pven = prize;
+        resp = val.pven;
+        return resp;
       }
-      listado(produ);
+    });
+  };
+
+  const handleCanti = (valor, id, cant) => {
+    let resp = "0";
+    valor.map((val) => {
+      if (id == val.id_prod) {
+        val.cantidad = cant;
+        resp = val.cantidad;
+        return resp;
+      }
     });
   };
 
@@ -39,14 +63,7 @@ export const Vent = () => {
   };
 
   const listado = (produc) => {
-    setLista(
-      <Lista
-        prods={produc}
-        handleElim={elimProd}
-        setProdu={setProdu}
-        handleEditar={editProd}
-      />
-    );
+    setLista(<Lista prods={produc} handleElim={elimProd} Edita={editProd} />);
   };
 
   return (
@@ -54,7 +71,6 @@ export const Vent = () => {
       <Search DevProd={obtenProdu} />
       <Clien></Clien>
       <Tipo></Tipo>
-
       {lista}
     </Container>
   );

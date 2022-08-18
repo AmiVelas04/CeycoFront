@@ -15,6 +15,7 @@ import Gasto from "../containers/Gastos";
 import Provee from "../containers/Proveedores";
 import AddProv from "../components/AddProv";
 import AddGast from "../components/AddGasto"
+import Menu from "../containers/Menu.jsx";
 
 export const Routers = () => {
   return (
@@ -23,6 +24,7 @@ export const Routers = () => {
     <NavBar/>
      <Routes>
          <Route  exact path='/' element={App}></Route>
+         <Route exact path='/menu' element={<Menu/>} ></Route>
          <Route exact path='/cli' element={<Clientes/>} ></Route>
          <Route  exact path='/produ' element={<Produs/>}  ></Route>
          <Route exact path='/comp' element={<Compras/>} ></Route>

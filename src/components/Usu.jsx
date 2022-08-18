@@ -9,11 +9,13 @@ import {
   ModalTitle,
   Table,
 } from "react-bootstrap";
+import Swal from "sweetalert";
 
 import { ListaUsu } from "./ListaUsu";
 
 export const Usu = () => {
   const URL = "/usuario/usurol";
+  const URLUPD = "/usuario/update";
   const getData = async () => {
     const response = axios.get(URL);
     // console.log(URL);
@@ -25,8 +27,9 @@ export const Usu = () => {
   const handleCloseModal = () => {
     setshowModal(false);
   };
-  const handleOpenModal = () => {
+  const handleOpenModal = (datos) => {
     setshowModal(true);
+    setDataModal(datos);
   };
   const handleChangeModal = ({ target }) => {
     setDataModal({
@@ -43,14 +46,42 @@ export const Usu = () => {
       console.log(response.data);
     });
   }, []);
+
+  const handleSave = async (e) => {
+    // alert(dataModal);
+    const response = await axios.put(URLUPD, dataModal);
+    try {
+      if (response.status === 200) {
+        await Swal(
+          "Actualizado",
+          "El usuario ha sido actualizado con exito",
+          "Success"
+        );
+      } else {
+        await Swal(
+          "No actualizado",
+          "El usuario no pudo ser actualizado",
+          "error"
+        );
+      }
+    } catch (error) {
+      await Swal(
+        "No Actualizado",
+        "El usuario no pudo ser actualizado, verifique el estado del servidor" +
+          error,
+        "error"
+      );
+    }
+  };
   return (
     <Container>
       <ListaUsu
         Usuario={list}
-        handleClosemodal={handleCloseModal}
-        handleOpenModal={handleOpenModal}
-        setDataModal={setDataModal}
+        HandleCerrarMod={handleCloseModal}
+        HandleAbrirMod={handleOpenModal}
+        setDataMod={setDataModal}
       />
+
       <Modal show={showModal} onhide={handleCloseModal}>
         <Modal.Header>
           <ModalTitle>Actualizar Datos</ModalTitle>
@@ -81,31 +112,9 @@ export const Usu = () => {
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
-                name="representante"
-                placeholder="Representante"
-                value={dataModal.representante}
-                onChange={handleChangeModal}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Control
-                type="text"
                 name="direccion"
                 placeholder="Direccion"
                 value={dataModal.direccion}
-                onChange={handleChangeModal}
-                required
-              />
-            </Form.Group>
-
-            <Form.Group className="mb-3">
-              <Form.Control
-                type="text"
-                name="nit"
-                placeholder="Nit"
-                value={dataModal.nit}
                 onChange={handleChangeModal}
                 required
               />
@@ -125,9 +134,9 @@ export const Usu = () => {
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
-                name="correo"
-                placeholder="Correo"
-                value={dataModal.correo}
+                name="usuario"
+                placeholder="Usuario"
+                value={dataModal.usuario}
                 onChange={handleChangeModal}
                 required
               />
@@ -136,16 +145,16 @@ export const Usu = () => {
             <Form.Group className="mb-3">
               <Form.Control
                 type="text"
-                name="facebook"
-                placeholder="Facebook"
-                value={dataModal.facebook}
+                name="pass"
+                placeholder="Conraseña"
+                value={dataModal.pass}
                 onChange={handleChangeModal}
                 required
               />
             </Form.Group>
           </ModalBody>
           <ModalFooter>
-            <button className="btn btn-success" onclick={handleCloseModal}>
+            <button className="btn btn-success" onclick={handleSave}>
               Guardar cambios
             </button>
             <button className="btn btn-danger" onClick={handleCloseModal}>

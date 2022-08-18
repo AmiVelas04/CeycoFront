@@ -1,17 +1,18 @@
 import React from "react";
+
 import { Container, Navbar } from "react-bootstrap";
 import { BrowserRouter, Route, Router } from "react-router-dom";
-import ListProd from "../components/Prod";
+
 import NavBar from "../components/NavBar";
-import log, { Login } from "../containers/Login";
+
 import { Routers } from "../routes/Router";
 
-export const App = () => {
+export const Menu = () => {
   return (
-    <Container fluid>
-      <Login />
-    </Container>
+    <div>
+      <Routers />
+    </div>
   );
 };
 
-export default App;
+export default Menu;

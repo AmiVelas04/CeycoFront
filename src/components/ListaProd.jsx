@@ -42,7 +42,7 @@ export const ListaProd = ({
               <td>{prod.cantidad}</td>
               <td>{moment(prod.caduc).format("DD/MM/yyyy")}</td>
               <td>
-                <button className="btn btn-info">Editar</button>
+                <button className="btn btn-info">Edit</button>
               </td>
             </tr>
           </tbody>

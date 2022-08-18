@@ -16,14 +16,14 @@ export const Searchprod = ({ DevProd, Lista }) => {
   const getDataProd = async (cod) => {
     const response = await axios.get(URL + "/" + cod);
     try {
-      console.log(response.status);
-      if (response.status == 200) {
+      //console.log(response.status);
+      if (response.status === 200) {
         if ((await response).data.length > 0) {
           return response;
         } else {
           return 0;
         }
-      } else if (response.status == 500) {
+      } else if (response.status === 500) {
         Swal(
           "Error",
           "Error en la conexion 1, porfavor intente de nuevo",
@@ -59,6 +59,7 @@ export const Searchprod = ({ DevProd, Lista }) => {
     }
     getDataProd(codi).then((response) => {
       if (response != 0) {
+        console.log(response.data);
         DevProd(response.data);
       } else {
         Swal(
